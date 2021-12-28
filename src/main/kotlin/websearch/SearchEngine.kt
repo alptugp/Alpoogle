@@ -1,3 +1,5 @@
+package websearch
+
 class SearchEngine(val map: Map<URL, WebPage>) {
   private var index: Map<String, List<SearchResult>> = mapOf()
 
@@ -16,7 +18,7 @@ class SearchEngine(val map: Map<URL, WebPage>) {
     for (group in urls.groupBy { it }) {
       lst.add(SearchResult(group.key, group.value.size))
     }
-    return lst.sortedByDescending { it.count }
+    return lst.sortedByDescending { it.numRefs }
   }
 
   fun searchFor(query: String): SearchResultsSummary {
@@ -24,21 +26,15 @@ class SearchEngine(val map: Map<URL, WebPage>) {
   }
 }
 
-class SearchResult(val url_search: URL, val count: Int)
+class SearchResult(val url: URL, val numRefs: Int)
 
-class SearchResultsSummary(val searchedWord: String, val url_results: List<SearchResult>) {
+class SearchResultsSummary(val query: String, val results: List<SearchResult>) {
   override fun toString(): String {
     val sb = StringBuilder()
-    sb.append("Results for \"${searchedWord}\":\n")
-    for (result in url_results) {
-      sb.append("  ${result.url_search} - ${result.count}")
+    sb.append("Results for \"${query}\":\n")
+    for (result in results) {
+      sb.append("  ${result.url} - ${result.numRefs}")
     }
     return sb.toString()
   }
 }
-
-fun main() {
-
-}
-
-

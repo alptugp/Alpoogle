@@ -18,7 +18,13 @@ class URL(val urlStr: String) {
 }
 
 class WebPage(val doc: Document) {
-  fun extractWords(): List<String> = doc.text().lowercase().filter({ !(it.toString().equals(".") || it.toString().equals(","))}).split(" ")
+  fun extractWords(): List<String> = doc.text().lowercase()
+    .filter({ !(it.toString().equals(".") || it.toString().equals(","))})
+    .split(" ")
 
-  fun extractLinks(): List<URL> = doc.getElementsByTag("a").map { URL(it.attr("href")) }.filter { it.urlStr.startsWith("http://") || it.urlStr.startsWith("https://") }
+  fun extractLinks(): List<URL> = doc
+    .getElementsByTag("a")
+    .map { URL(it.attr("href")) }
+    .filter { it.urlStr.startsWith("http://") || it.urlStr.startsWith("https://")
+    }
 }
